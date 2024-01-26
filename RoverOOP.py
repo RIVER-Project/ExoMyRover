@@ -62,8 +62,8 @@ class Joint:
 
         if direction is None:
             direction = []
-        elif direction!=backwardDirection or direction!=forwardDirection:
-          raise Exception("Direction must be -1 or 1")
+        elif direction!=backwardDirection and direction!=forwardDirection and direction!=noDirection:
+          raise Exception("Direction must be 0, -1 or 1")
         self.direction = noDirection          #public argument, default is noDirection (globally defined as 0)
 
 
@@ -85,8 +85,8 @@ class Joint:
        else:
         self.speed = speed
        
-       if direction!=backwardDirection or direction!=forwardDirection:
-          raise Exception("Direction must be -1 or 1")
+       if direction!=backwardDirection and direction!=forwardDirection and direction!=noDirection:
+          raise Exception("Direction must be 0, -1 or 1")
        elif self._id360 in [0, 2, 4]:  #correction for the left-side 360 motors
           direction = direction * (-1)
        else:
@@ -171,7 +171,7 @@ def main():
 
  while True:
     try:
-       choice = int(input("Options:\n1. Move forward\n2. Move backward\n3. Stop"))
+       choice = int(input("\nOptions:\n1. Move forward\n2. Move backward\n3. Stop\n"))
        if choice == 1:
         Rover_obj.Move_forward()
        elif choice == 2:
