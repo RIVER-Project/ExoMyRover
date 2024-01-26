@@ -107,33 +107,40 @@ class Joint:
 class Rover:
    def __init__(self, FLJ_obj, FRJ_obj, MLJ_obj, MRJ_obj, RLJ_obj, RRJ_obj):
       self.FLJ_obj = FLJ_obj
-      self.FRL_obj = FRJ_obj
+      self.FRJ_obj = FRJ_obj
       self.MLJ_obj = MLJ_obj
       self.MRJ_obj = MRJ_obj
       self.RLJ_obj = RLJ_obj
       self.RRJ_obj = RRJ_obj
 
-   def Move_forward(self):
-      self.FLJ_obj.Move(neutralAngle, maxSpeed, forwardDirection)
-      self.FRL_obj.Move(neutralAngle, maxSpeed, forwardDirection)
+   def Move_forward(self, angle):
+      self.FLJ_obj.Move(int(angle), maxSpeed, forwardDirection)
+      self.FRJ_obj.Move(int(angle), maxSpeed, forwardDirection)
       self.MLJ_obj.Move(neutralAngle, maxSpeed, forwardDirection)
       self.MRJ_obj.Move(neutralAngle, maxSpeed, forwardDirection)
       self.RLJ_obj.Move(neutralAngle, maxSpeed, forwardDirection)
       self.RRJ_obj.Move(neutralAngle, maxSpeed, forwardDirection)
-   def Move_backward(self):
+   def Move_backward(self, angle):
       self.FLJ_obj.Move(neutralAngle, maxSpeed, backwardDirection)
-      self.FRL_obj.Move(neutralAngle, maxSpeed, backwardDirection)
+      self.FRJ_obj.Move(neutralAngle, maxSpeed, backwardDirection)
       self.MLJ_obj.Move(neutralAngle, maxSpeed, backwardDirection)
       self.MRJ_obj.Move(neutralAngle, maxSpeed, backwardDirection)
-      self.RLJ_obj.Move(neutralAngle, maxSpeed, backwardDirection)
-      self.RRJ_obj.Move(neutralAngle, maxSpeed, backwardDirection)
+      self.RLJ_obj.Move(int(180-angle), maxSpeed, backwardDirection)
+      self.RRJ_obj.Move(int(180-angle), maxSpeed, backwardDirection)
    def Stop_rover(self):
       self.FLJ_obj.Move(neutralAngle, stopSpeed, noDirection)
-      self.FRL_obj.Move(neutralAngle, stopSpeed, noDirection)
+      self.FRJ_obj.Move(neutralAngle, stopSpeed, noDirection)
       self.MLJ_obj.Move(neutralAngle, stopSpeed, noDirection)
       self.MRJ_obj.Move(neutralAngle, stopSpeed, noDirection)
       self.RLJ_obj.Move(neutralAngle, stopSpeed, noDirection)
       self.RRJ_obj.Move(neutralAngle, stopSpeed, noDirection)
+   def Crab_walk(self, direction):
+      self.FLJ_obj.Move(maxAngle, maxSpeed, direction)
+      self.FRJ_obj.Move(maxAngle, maxSpeed, direction)
+      self.MLJ_obj.Move(maxAngle, maxSpeed, direction)
+      self.MRJ_obj.Move(maxAngle, maxSpeed, direction)
+      self.RLJ_obj.Move(maxAngle, maxSpeed, direction)
+      self.RRJ_obj.Move(maxAngle, maxSpeed, direction)
 
 
 #Create the main function
@@ -171,12 +178,17 @@ def main():
 
  while True:
     try:
-       choice = int(input("\nOptions:\n1. Move forward\n2. Move backward\n3. Stop\n"))
+       choice = int(input("\nOptions:\n1. Move forward\n2. Move backward\n3. Crab walk\n4. Stop\n"))
        if choice == 1:
-        Rover_obj.Move_forward()
+        angle = int(input('\nANGLE (0-180): \n'))
+        Rover_obj.Move_forward(angle)
        elif choice == 2:
-        Rover_obj.Move_backward()
+        angle = int(input('\nANGLE (0-180): \n'))
+        Rover_obj.Move_backward(angle)
        elif choice == 3:
+          direction = int(input('\nDIRECTION (left = -1 or right = 1): \n'))
+          Rover_obj.Crab_walk(direction)
+       elif choice == 4:
         Rover_obj.Stop_rover()
        else:
           print("Exiting the program")
