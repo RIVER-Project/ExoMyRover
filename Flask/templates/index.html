@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robot Remote Control</title>
+        <img src="{{ url_for('video_feed') }}" width="640" height="480">
+
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .button {
+            width: 100px;
+            height: 50px;
+            font-size: 18px;
+            margin: 0 10px;
+        }
+        canvas {
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Robot Remote Control</h1>
+        <canvas id="canvas" width="400" height="400"></canvas>
+        <div class="row">
+            <button class="button" id="forwardButton">Forward</button>
+        </div>
+        <div class="row">
+            <button class="button" id="leftButton">Left</button>
+            <button class="button" id="stopButton">Stop</button>
+            <button class="button" id="rightButton">Right</button>
+        </div>
+        <div class="row">
+            <button class="button" id="backwardButton">Backward</button>
+        </div>
+    </div>
+
+<script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    let x = canvas.width / 2;
+    let y = canvas.height / 2;
+    const step = 5; // Adjust the step size as needed
+
+    const drawRobot = function() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.beginPath();
+        ctx.arc(x, y, 10, 0, Math.PI * 2);
+        ctx.fillStyle = 'green';
+        ctx.fill();
+        ctx.closePath();
+    };
+
+    const handleEvent = function(direction) {
+        switch (direction) {
+            case 'forwardButton':
+                y -= step;
+                break;
+            case 'backwardButton':
+                y += step;
+                break;
+            case 'leftButton':
+                x -= step;
+                break;
+            case 'rightButton':
+                x += step;
+                break;
+        }
+        drawRobot();
+    };
+
+    const buttons = document.querySelectorAll('.button');
+
+    buttons.forEach(button => {
+        let intervalId;
+        button.addEventListener('mousedown', function() {
+            intervalId = setInterval(function() {
+                handleEvent(button.id);
+            }, 100); // Adjust the interval as needed
+        });
+        button.addEventListener('mouseup', function() {
+            clearInterval(intervalId);
+            fetch(`/stop`, {
+                method: 'POST'
+            });
+        });
+        button.addEventListener('touchstart', function(event) {
+            event.preventDefault();
+            intervalId = setInterval(function() {
+                handleEvent(button.id);
+            }, 100); // Adjust the interval as needed
+        });
+        button.addEventListener('touchend', function(event) {
+            clearInterval(intervalId);
+            event.preventDefault();
+            fetch(`/stop`, {
+                method: 'POST'
+            });
+        });
+    });
+
+    drawRobot();
+</script>
+
+</body>
+</html>
