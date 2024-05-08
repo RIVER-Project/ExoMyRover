@@ -22,6 +22,7 @@ def move_right():
 def index():
     return render_template('index1.html')
 
+# Move endpoint
 @app.route('/move', methods=['POST'])
 def move():
     direction = request.args.get('direction')
