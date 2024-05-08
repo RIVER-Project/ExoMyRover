@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robot Remote Control</title>
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .row {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .button {
+            width: 100px;
+            height: 50px;
+            font-size: 18px;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <button class="button" id="forwardButton" onclick="move('forward')">Forward</button>
+        </div>
+        <div class="row">
+            <button class="button" id="leftButton" onclick="move('left')">Left</button>
+            <button class="button" id="stopButton" onclick="move('stop')">Stop</button>
+            <button class="button" id="rightButton" onclick="move('right')">Right</button>
+        </div>
+        <div class="row">
+            <button class="button" id="backwardButton" onclick="move('backward')">Backward</button>
+        </div>
+    </div>
+
+    <script>
+        function move(direction) {
+            fetch(`/move?direction=${direction}`, {
+                method: 'POST'
+            });
+        }
+    </script>
+</body>
+</html>
