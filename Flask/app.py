@@ -91,4 +91,4 @@ def move():
 
 if __name__ == '__main__':
     Rover_obj.Move_forward(90)
-    app.run('0.0.0.0', 5420, debug=True)
+    app.run('0.0.0.0', 5000, debug=False, use_reloader=False)
