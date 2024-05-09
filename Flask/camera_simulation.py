@@ -1,4 +1,5 @@
 from picamera2 import Picamera2
+import picamera2
 import io
 from flask import Flask, Response, render_template
 
@@ -10,7 +11,7 @@ class StreamingOutput(object):
     def __init__(self):
         self.frame = None
         self.buffer = io.BytesIO()
-        self.condition = Picamera2.Picamera2Lock()
+        self.condition = picamera2.Picamera2Lock()
 
     def write(self, buf):
         if buf.startswith(b'\xff\xd8'):
