@@ -1,3 +1,4 @@
+import cv2
 from picamera2 import Picamera2
 from flask import Flask, Response
 import time
@@ -16,8 +17,10 @@ def generate_frames():
         try:
             frame = camera.capture_array()
             print(frame)
+            ret, buffer = cv2.imencode('.jpg', frame)
+            frame = buffer.tobytes()
             yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame.tobytes() + b'\r\n')
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
         except Exception as e:
             print("Error capturing frame:", e)
 
