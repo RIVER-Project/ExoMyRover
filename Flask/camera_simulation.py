@@ -1,4 +1,4 @@
-import picamera2
+from picamera2 import Picamera2
 from flask import Flask, Response
 
 app = Flask(__name__)
