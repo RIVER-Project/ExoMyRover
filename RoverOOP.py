@@ -114,6 +114,7 @@ class Rover:
         self.MRJ_obj.Move(neutralAngle, maxSpeed, forwardDirection)
         self.RLJ_obj.Move(neutralAngle, maxSpeed, forwardDirection)
         self.RRJ_obj.Move(neutralAngle, maxSpeed, forwardDirection)
+        return "Moving forward"
 
     def Move_backward(self, angle):
         self.FLJ_obj.Move(neutralAngle, maxSpeed, backwardDirection)
@@ -122,6 +123,8 @@ class Rover:
         self.MRJ_obj.Move(neutralAngle, maxSpeed, backwardDirection)
         self.RLJ_obj.Move(int(180 - angle), maxSpeed, backwardDirection)
         self.RRJ_obj.Move(int(180 - angle), maxSpeed, backwardDirection)
+        return "Moving backward"
+
 
     def Stop_rover(self):
         self.FLJ_obj.Move(neutralAngle, stopSpeed, noDirection)
@@ -130,6 +133,8 @@ class Rover:
         self.MRJ_obj.Move(neutralAngle, stopSpeed, noDirection)
         self.RLJ_obj.Move(neutralAngle, stopSpeed, noDirection)
         self.RRJ_obj.Move(neutralAngle, stopSpeed, noDirection)
+        return "Stopped"
+
 
     def Crab_walk(self, direction):
         self.FLJ_obj.Move(maxAngle, maxSpeed, direction)
