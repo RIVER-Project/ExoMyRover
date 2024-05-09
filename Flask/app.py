@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request
-
+from flask import Flask, Response, render_template, request
+import io
+import picamera
 from RoverOOP import Rover, Joint
 
 app = Flask(__name__)
@@ -14,7 +15,20 @@ RRJ = Joint(5, 11)  # Rear Right Joint
 # Create the Rover object, having as arguments the 6 Joint objects
 Rover_obj = Rover(FLJ, FRJ, MLJ, MRJ, RLJ, RRJ)
 
+def generate_frames():
+    with picamera.PiCamera() as camera:
+        camera.resolution = (640, 480)
+        camera.framerate = 24
+        stream = io.BytesIO()
+        for _ in camera.capture_continuous(stream, 'jpeg', use_video_port=True):
+            stream.seek(0)
+            yield b'--frame\r\nContent-Type: image/jpeg\r\n\r\n' + stream.read() + b'\r\n'
+            stream.seek(0)
+            stream.truncate()
 
+@app.route('/video_feed')
+def video_feed():
+    return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 def move_forward():
     # Code to move the robot forward
     Rover_obj.Move_forward(90)
