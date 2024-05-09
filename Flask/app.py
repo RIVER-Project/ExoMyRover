@@ -1,9 +1,10 @@
 from flask import Flask, Response, render_template, request
-import io
-import picamera
+import cv2
 from RoverOOP import Rover, Joint
 
 app = Flask(__name__)
+
+camera = cv2.VideoCapture(0)
 
 FLJ = Joint(0, 6)  # Front Left Joint
 FRJ = Joint(1, 7)  # Front Right Joint
@@ -16,15 +17,15 @@ RRJ = Joint(5, 11)  # Rear Right Joint
 Rover_obj = Rover(FLJ, FRJ, MLJ, MRJ, RLJ, RRJ)
 
 def generate_frames():
-    with picamera.PiCamera() as camera:
-        camera.resolution = (640, 480)
-        camera.framerate = 24
-        stream = io.BytesIO()
-        for _ in camera.capture_continuous(stream, 'jpeg', use_video_port=True):
-            stream.seek(0)
-            yield b'--frame\r\nContent-Type: image/jpeg\r\n\r\n' + stream.read() + b'\r\n'
-            stream.seek(0)
-            stream.truncate()
+    while True:
+        success, frame = camera.read
+        if not success:
+            break
+        else:
+            ret, buffer = cv2.imencode('.jpg', frame)
+            frame = buffer.tobytes()
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # concat frame one by one and show $
 
 @app.route('/video_feed')
 def video_feed():
