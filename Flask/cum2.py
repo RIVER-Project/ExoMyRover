@@ -26,10 +26,7 @@ class StreamingOutput(io.BufferedIOBase):
 def genFrames():
     with picamera2.Picamera2() as camera:
         camera.configure(camera.create_video_configuration(main={"size": (640, 480)}))
-        encoder = JpegEncoder()
         output3 = StreamingOutput()
-
-        camera.start_encoder(encoder)
         camera.start()
         while True:
             with output3.condition:
