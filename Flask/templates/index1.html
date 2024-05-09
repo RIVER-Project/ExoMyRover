@@ -41,9 +41,20 @@
         .button:active {
             background-color: #3e8e41; /* Dark green */
         }
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: none;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body>
+<div class="center">
+    <iframe src="http://10.0.0.11:5069" width="920" height="740" style="overflow: hidden"></iframe>
+</div>
+
     <div class="container">
         <div class="row">
             <button class="button" id="forwardButton" onclick="move('forward')">Forward</button>
@@ -59,11 +70,32 @@
     </div>
 
     <script>
-        function move(direction) {
-            fetch(`/move?direction=${direction}`, {
-                method: 'POST'
+        const buttons = document.querySelectorAll('.button');
+
+        buttons.forEach(button => {
+            button.addEventListener('mousedown', function() {
+                fetch(`/move?direction=${this.id}`, {
+                    method: 'POST'
+                });
             });
-        }
+            button.addEventListener('mouseup', function() {
+                fetch(`/stop`, {
+                    method: 'POST'
+                });
+            });
+            button.addEventListener('touchstart', function(event) {
+                event.preventDefault();
+                fetch(`/move?direction=${this.id}`, {
+                    method: 'POST'
+                });
+            });
+            button.addEventListener('touchend', function(event) {
+                event.preventDefault();
+                fetch(`/stop`, {
+                    method: 'POST'
+                });
+            });
+        });
     </script>
 </body>
 </html>
