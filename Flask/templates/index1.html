@@ -69,33 +69,12 @@
         </div>
     </div>
 
-    <script>
-        const buttons = document.querySelectorAll('.button');
-
-        buttons.forEach(button => {
-            button.addEventListener('mousedown', function() {
-                fetch(`/move?direction=${this.id}`, {
-                    method: 'POST'
-                });
+   <script>
+        function move(direction) {
+            fetch(`/move?direction=${direction}`, {
+                method: 'POST'
             });
-            button.addEventListener('mouseup', function() {
-                fetch(`/stop`, {
-                    method: 'POST'
-                });
-            });
-            button.addEventListener('touchstart', function(event) {
-                event.preventDefault();
-                fetch(`/move?direction=${this.id}`, {
-                    method: 'POST'
-                });
-            });
-            button.addEventListener('touchend', function(event) {
-                event.preventDefault();
-                fetch(`/stop`, {
-                    method: 'POST'
-                });
-            });
-        });
+        }
     </script>
 </body>
 </html>

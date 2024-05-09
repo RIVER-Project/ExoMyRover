@@ -47,11 +47,6 @@ def index():
     return render_template('index1.html')
 
 
-@app.route('/stop', methods=['POST'])
-def stop():
-    return stop_rover()
-
-
 # Move endpoint
 @app.route('/move', methods=['POST'])
 def move():
@@ -64,9 +59,12 @@ def move():
         return move_left()
     elif direction == 'right':
         return move_right()
+    elif direction == 'stop':
+        return stop_rover()
     else:
         return 'Invalid direction'
 
+
 if __name__ == '__main__':
-    Rover_obj.Stop_rover()
+    Rover_obj.Move_forward(90)
     app.run('0.0.0.0', 5420, debug=True)
