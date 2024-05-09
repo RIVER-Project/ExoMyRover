@@ -1,19 +1,17 @@
 from flask import Flask, Response, render_template, stream_with_context, request
 import cv2
+from picamera2 import Picamera2
 
-from RoverOOP import Rover, Joint
 
-video = cv2.VideoCapture(0)  # Initialize camera
-
+picam2 = Picamera2()
+picam2.preview_configuration.main.size = (1920, 1080)
+picam2.preview_configuration.main.format = "RGB888"
+picam2.start()
 app = Flask(__name__)
 
 def video_stream():
     while True:
-        ret, frame = video.read()  # Read frame from camera
-        if not ret:
-            break
-        else:
-            ret, buffer = cv2.imencode('.jpeg', frame)
+            buffer = picam2.capture_array()
             frame = buffer.tobytes()
             yield (b' --frame\r\n' b'Content-type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
