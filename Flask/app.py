@@ -18,11 +18,13 @@ Rover_obj = Rover(FLJ, FRJ, MLJ, MRJ, RLJ, RRJ)
 def move_forward():
     # Code to move the robot forward
     Rover_obj.Move_forward(90)
+    return 'Moved forward'
 
 
 def move_backward():
     # Code to move the robot backward
     Rover_obj.Move_backward(90)
+    return 'Moved backward'
 
 
 def move_left():
@@ -37,6 +39,7 @@ def move_right():
 
 def stop_rover():
     Rover_obj.Stop_rover()
+    return 'Stopped rover'
 
 
 @app.route('/')
@@ -63,7 +66,6 @@ def move():
         return move_right()
     else:
         return 'Invalid direction'
-
 
 if __name__ == '__main__':
     app.run('0.0.0.0', 5420, debug=True)
