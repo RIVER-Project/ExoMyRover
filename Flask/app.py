@@ -18,7 +18,7 @@ Rover_obj = Rover(FLJ, FRJ, MLJ, MRJ, RLJ, RRJ)
 
 def generate_frames():
     while True:
-        success, frame = camera.read
+        success, frame = camera.read()
         if not success:
             break
         else:
