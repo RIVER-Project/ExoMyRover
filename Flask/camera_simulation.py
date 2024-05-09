@@ -1,7 +1,7 @@
 import cv2
 from picamera2 import Picamera2
 from flask import Flask, Response
-import time
+
 
 app = Flask(__name__)
 
@@ -17,7 +17,6 @@ def generate_frames():
     while True:
         try:
             frame = camera.capture_array()
-            print(frame)
             ret, buffer = cv2.imencode('.jpg', frame)
             frame = buffer.tobytes()
             yield (b'--frame\r\n'
