@@ -143,3 +143,57 @@ class Rover:
         self.MRJ_obj.Move(maxAngle, maxSpeed, direction)
         self.RLJ_obj.Move(maxAngle, maxSpeed, direction)
         self.RRJ_obj.Move(maxAngle, maxSpeed, direction)
+
+
+# Create the main function
+def main():
+    # Create the 6 objects using the corresponding id for each motor (see list below)
+
+    ###360
+    # front_left360 = 0
+    # front_right360 = 1
+    # middle_left360 = 2
+    # middle_right360 = 3
+    # rear_left360 = 4
+    # rear_right360 = 5
+
+    ###180
+    # front_left180 = 6
+    # front_right180 = 7
+    # middle_left180 = 8
+    # middle_right180 = 9
+    # rear_left180 = 10
+    # rear_right180 = 11
+
+    FLJ = Joint(0, 6)  # Front Left Joint
+    FRJ = Joint(1, 7)  # Front Right Joint
+    MLJ = Joint(2, 8)  # Middle Left Joint
+    MRJ = Joint(3, 9)  # Middle Right Joint
+    RLJ = Joint(4, 10)  # Rear Left Joint
+    RRJ = Joint(5, 11)  # Rear Right Joint
+    # Create the Rover object, having as arguments the 6 Joint objects
+    Rover_obj = Rover(FLJ, FRJ, MLJ, MRJ, RLJ, RRJ)
+
+    while True:
+        try:
+            choice = int(input("\nOptions:\n1. Move forward\n2. Move backward\n3. Crab walk\n4. Stop\n"))
+            if choice == 1:
+                angle = int(input('\nANGLE (0-180): \n'))
+                Rover_obj.Move_forward(angle)
+            elif choice == 2:
+                angle = int(input('\nANGLE (0-180): \n'))
+                Rover_obj.Move_backward(angle)
+            elif choice == 3:
+                direction = int(input('\nDIRECTION (left = -1 or right = 1): \n'))
+                Rover_obj.Crab_walk(direction)
+            elif choice == 4:
+                Rover_obj.Stop_rover()
+            else:
+                print("Exiting the program")
+
+        except ValueError:
+            print("Invalid input. Please enter an integer.")
+
+if __name__ == "__main__":
+    main()
+
