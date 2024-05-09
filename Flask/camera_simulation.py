@@ -4,7 +4,7 @@ from flask import Flask, Response
 app = Flask(__name__)
 
 # Initialize the camera
-camera = picamera2.Picamera2()
+camera = Picamera2()
 camera.resolution = (640, 480)
 
 # Generator function for streaming frames
