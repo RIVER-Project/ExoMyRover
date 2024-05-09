@@ -26,8 +26,9 @@ class StreamingOutput(object):
 # Camera initialization
 camera = Picamera2()
 camera.resolution = (640, 480)
+camera.format = 'mjpeg'  # Set the format here
 output = StreamingOutput()
-camera.start_recording(output, format='mjpeg')
+camera.start_recording(output)
 
 @app.route('/')
 def index():
