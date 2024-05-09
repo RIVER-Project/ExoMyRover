@@ -1,33 +1,49 @@
-from flask import Flask, Response, render_template, stream_with_context, request
-import cv2
-from picamera2 import Picamera2
+import picamera2
+import io
+from flask import Flask, Response, render_template
 
-picam2 = Picamera2()
-picam2.preview_configuration.main.size = (1920, 1080)
-picam2.preview_configuration.main.format = "RGB888"
-picam2.start()
 app = Flask(__name__)
 
+# Create a streaming output object
+class StreamingOutput(object):
+    def __init__(self):
+        self.frame = None
+        self.buffer = io.BytesIO()
+        self.condition = picamera2.Picamera2Lock()
 
-def video_stream():
+    def write(self, buf):
+        if buf.startswith(b'\xff\xd8'):
+            # New frame, copy the existing buffer's content and notify all clients it's available
+            self.buffer.truncate()
+            with self.condition:
+                self.frame = self.buffer.getvalue()
+                self.condition.notify_all()
+            self.buffer.seek(0)
+        return self.buffer.write(buf)
+
+# Camera initialization
+camera = picamera2.Picamera2()
+camera.resolution = (640, 480)
+output = StreamingOutput()
+camera.start_recording(output, format='mjpeg')
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+# Generator function for streaming frames
+def generate():
     while True:
-        buffer = picam2.capture
-        # Convert the frame to JPEG format
-        ret, jpeg = cv2.imencode('.jpg', buffer)
-        frame = jpeg.tobytes()
+        with output.condition:
+            output.condition.wait()
+            frame = output.frame
         yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
-
-@app.route('/camera')
-def camera():
-    return render_template('camera.html')
-
-
+# Route for video feed
 @app.route('/video_feed')
 def video_feed():
-    return Response(video_stream(), mimetype='multipart/x-mixed-replace; boundary=frame')
-
+    return Response(generate(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == '__main__':
-    app.run('0.0.0.0', port=5069, debug=False)
+    app.run(host='0.0.0.0', port=5000, debug=True)
