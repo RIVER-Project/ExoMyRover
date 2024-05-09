@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 def video_stream():
     while True:
-        buffer = picam2.capture_array()
+        buffer = picam2.capture
         # Convert the frame to JPEG format
         ret, jpeg = cv2.imencode('.jpg', buffer)
         frame = jpeg.tobytes()
