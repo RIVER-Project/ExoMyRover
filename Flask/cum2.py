@@ -45,14 +45,13 @@ class video_feed(Resource):
         return Response(genFrames(),
                         mimetype='multipart/x-mixed-replace; boundary=frame')
 
+
 @app.route('/')
 def index():
     return render_template('camera.html')
 
+
 api.add_resource(video_feed, '/cam')
-
-
-
 
 if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0', port=5000)
