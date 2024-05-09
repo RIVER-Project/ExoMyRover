@@ -68,4 +68,5 @@ def move():
         return 'Invalid direction'
 
 if __name__ == '__main__':
+    Rover_obj.Stop_rover()
     app.run('0.0.0.0', 5420, debug=True)
