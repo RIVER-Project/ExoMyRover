@@ -12,8 +12,11 @@ app = Flask(__name__)
 def video_stream():
     while True:
         buffer = picam2.capture_array()
-        frame = buffer.tobytes()
-        yield (b' --frame\r\n' b'Content-type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+        # Convert the frame to JPEG format
+        ret, jpeg = cv2.imencode('.jpg', buffer)
+        frame = jpeg.tobytes()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
 
 @app.route('/camera')
