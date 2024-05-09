@@ -7,15 +7,14 @@ app = Flask(__name__)
 # Initialize the camera
 try:
     camera = Picamera2()
-    camera.resolution = (640, 480)
-    camera.start_preview()
+    camera.start()
 except Exception as e:
     print("Error initializing camera:", e)
 # Generator function for streaming frames
 def generate_frames():
     while True:
         try:
-            frame = camera.capture_array(format='jpeg', use_video_port=True)
+            frame = camera.capture_array()
             print(frame)
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame.tobytes() + b'\r\n')
