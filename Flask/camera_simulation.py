@@ -8,7 +8,7 @@ app = Flask(__name__)
 # Initialize the camera
 try:
     camera = Picamera2()
-    camera.main.format= "RGB888"
+    camera.configuration.main.format= "RGB888"
     camera.start()
 except Exception as e:
     print("Error initializing camera:", e)
