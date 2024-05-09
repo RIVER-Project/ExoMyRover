@@ -29,7 +29,7 @@ camera.start_recording(output, format='mjpeg')
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('camera.html')
 
 # Generator function for streaming frames
 def generate():
