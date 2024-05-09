@@ -8,7 +8,7 @@ app = Flask(__name__)
 # Initialize the camera
 try:
     camera = Picamera2()
-    camera.configuration.main.format= "RGB888"
+    camera.preview_configuration.main.format= "RGB888"
     camera.start()
 except Exception as e:
     print("Error initializing camera:", e)
@@ -31,6 +31,5 @@ def video_feed():
     return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == '__main__':
-    time.sleep(5)
     app.run(host='0.0.0.0', port=5000, debug=False, use_reloader=False)
 
