@@ -64,6 +64,7 @@ def move_right():
 
 
 def stop_rover():
+    # Code to move the robot right
     Rover_obj.Stop_rover()
     return 'Stopped rover'
 
