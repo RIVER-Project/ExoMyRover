@@ -53,11 +53,13 @@ def move_backward():
 
 def move_left():
     # Code to move the robot left
+    Rover_obj.Move_forward(45)
     return 'Moving left'
 
 
 def move_right():
     # Code to move the robot right
+    Rover_obj.Move_forward(135)
     return 'Moving right'
 
 
