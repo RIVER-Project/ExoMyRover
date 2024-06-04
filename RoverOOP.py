@@ -1,5 +1,6 @@
 # Import necessary libraries
 from adafruit_servokit import ServoKit
+from mocks.mock_servo import MockServoKit
 
 # Pulse width range global parameters
 servo180_1 = 535
@@ -20,7 +21,8 @@ backwardDirection = -1
 noDirection = 0
 
 # Create the kit object of the ServoKit class from the Adafruit library
-kit = ServoKit(channels=16)
+# In production this should be: ServoKit
+kit = MockServoKit(channels=16)
 
 # Set PWM range for each 180 motor
 for i in range(6, 12):
