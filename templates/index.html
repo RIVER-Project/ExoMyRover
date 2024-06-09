@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robot Remote Control</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        function move(direction) {
+            fetch('/move', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({direction: direction})
+            })
+            .then(response => response.json())
+            .then(data => console.log(data.status))
+            .catch(error => console.error('Error:', error));
+        }
+
+        function shutdown() {
+            fetch('/shutdown', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => console.log(data.status))
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</head>
+<body>
+    <div class="header">
+        <img src="{{ url_for('static', filename='rover_logo.png') }}" alt="Logo" class="logo">
+        <div class="header-right">
+            <button class="button shutdown-button" id="shutdownButton" onclick="shutdown()">Shut Down</button>
+            <div class="battery-container">
+                <span class="battery-text">Battery level</span>
+                <div class="battery-bar">
+                    <!-- Battery level read from the actual batteries -->
+                    <div class="battery-level" style="width: 70%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="video-container">
+            <!-- Video url with fallback image -->
+            <img src="{{ url_for('video_feed') }}" width="480" height="300" alt="video feed">
+        </div>
+
+        <div class="controls-container">
+            <div class="row">
+                <button class="button" id="forwardButton" onmousedown="move('forward')" onmouseup="move('stop')">Forward</button>
+            </div>
+            <div class="row">
+                <button class="button" id="leftButton" onmousedown="move('left')" onmouseup="move('stop')">Left</button>
+                <button class="button" id="rightButton" onmousedown="move('right')" onmouseup="move('stop')">Right</button>
+            </div>
+            <div class="row">
+                <button class="button" id="backwardButton" onmousedown="move('backward')" onmouseup="move('stop')">Backward</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
