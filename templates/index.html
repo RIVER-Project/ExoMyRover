@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Robot Remote Control</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="../static/styles.css">
     <script>
         function move(direction) {
             fetch('/move', {
@@ -31,23 +31,16 @@
 </head>
 <body>
     <div class="header">
-        <img src="{{ url_for('static', filename='rover_logo.png') }}" alt="Logo" class="logo">
+        <img src="../static/rover_logo.png" alt="Logo" class="logo">
         <div class="header-right">
             <button class="button shutdown-button" id="shutdownButton" onclick="shutdown()">Shut Down</button>
-            <div class="battery-container">
-                <span class="battery-text">Battery level</span>
-                <div class="battery-bar">
-                    <!-- Battery level read from the actual batteries -->
-                    <div class="battery-level" style="width: 70%;"></div>
-                </div>
-            </div>
         </div>
     </div>
 
     <div class="main-container">
         <div class="video-container">
             <!-- Video url with fallback image -->
-            <img src="{{ url_for('video_feed') }}" width="480" height="300" alt="video feed">
+            <img src="{{ url_for('video_feed') }}" alt="video feed" class="video">
         </div>
 
         <div class="controls-container">
